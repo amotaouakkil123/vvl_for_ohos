@@ -1,7 +1,7 @@
 Clear-Host
 
-$OHOS_SDK = "path\to\OpenHarmony\Sdk\12\native"
-$VVL_DIR = "path\to\Vulkan-ValidationLayers"
+$OHOS_SDK = "C:\Users\a00914048\AppData\Local\OpenHarmony\Sdk\12\native"
+$VVL_DIR = "D:\repos\Vulkan-ValidationLayers"
 $BUILD_THREADS = 8
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -27,7 +27,8 @@ cmake                                                                           
     -D CMAKE_BUILD_TYPE=Release                                                 `
     -D VVL_CODEGEN=ON                                                           `
     -D UPDATE_DEPS=ON                                                           `
-    -D UPDATE_DEPS_DIR="${buildDir}"
+    -D UPDATE_DEPS_DIR="${buildDir}"                                            `
+    -D Python3_EXECUTABLE="C:\Users\a00914048\AppData\Local\Programs\Python\Python313\python3.exe"
 
 # Codegen boilerplate code from Vulkan registry (vk.xml from Vulkan-Headers)...
 
