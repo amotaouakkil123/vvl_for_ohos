@@ -51,6 +51,7 @@ branch of the member gitlab server.
         <tag name="VIV"         author="Vivante Corporation"           contact="Yanjun Zhang gitlab:@yanjunzhang"/>
         <tag name="VSI"         author="VeriSilicon Holdings Co., Ltd." contact="Yanjun Zhang gitlab:@yanjunzhang"/>
         <tag name="KDAB"        author="KDAB"                          contact="Sean Harmer @seanharmer"/>
+        <tag name="OHOS"        author="Huawei"                        contact="John Doe @jdoe"/>
         <tag name="ANDROID"     author="Google LLC"                    contact="Jesse Hall @critsec"/>
         <tag name="CHROMIUM"    author="Google LLC"                    contact="Jesse Hall @critsec"/>
         <tag name="FUCHSIA"     author="Google LLC"                    contact="Craig Stout @cdotstout, Jesse Hall @critsec, John Rosasco @rosasco"/>
@@ -229,6 +230,7 @@ branch of the member gitlab server.
     #endif
 #endif</type>
 
+        <type category="basetype">struct <name>OHNativeWindow</name>;</type>
         <type category="basetype">struct <name>ANativeWindow</name>;</type>
         <type category="basetype">struct <name>AHardwareBuffer</name>;</type>
         <type category="basetype">#ifdef __OBJC__
@@ -401,6 +403,7 @@ typedef void* <name>MTLSharedEvent_id</name>;
         <type requires="VkSwapchainCreateFlagBitsKHR"     category="bitmask">typedef <type>VkFlags</type> <name>VkSwapchainCreateFlagsKHR</name>;</type>
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkDisplayModeCreateFlagsKHR</name>;</type>
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkDisplaySurfaceCreateFlagsKHR</name>;</type>
+        <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkSurfaceCreateFlagsOHOS</name>;</type>
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkAndroidSurfaceCreateFlagsKHR</name>;</type>
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkViSurfaceCreateFlagsNN</name>;</type>
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkWaylandSurfaceCreateFlagsKHR</name>;</type>
@@ -2119,6 +2122,12 @@ typedef void* <name>MTLSharedEvent_id</name>;
             <member><type>VkSurfaceTransformFlagBitsKHR</type>    <name>currentTransform</name><comment>The surface's current transform relative to the device's natural orientation</comment></member>
             <member><type>VkCompositeAlphaFlagsKHR</type>         <name>supportedCompositeAlpha</name><comment>1 or more bits representing the alpha compositing modes supported</comment></member>
             <member><type>VkImageUsageFlags</type>                <name>supportedUsageFlags</name><comment>Supported image usage flags for the surface</comment></member>
+        </type>
+        <type category="struct" name="VkSurfaceCreateInfoOHOS">
+            <member values="VK_STRUCTURE_TYPE_SURFACE_CREATE_INFO_OHOS"><type>VkStructureType</type> <name>sType</name></member>
+            <member optional="true">const <type>void</type>*                                    <name>pNext</name></member>
+            <member optional="true"><type>VkSurfaceCreateFlagsOHOS</type> <name>flags</name></member>
+            <member noautovalidity="true">struct <type>OHNativeWindow</type>*    <name>window</name></member>
         </type>
         <type category="struct" name="VkAndroidSurfaceCreateInfoKHR">
             <member values="VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
@@ -12345,6 +12354,13 @@ typedef void* <name>MTLSharedEvent_id</name>;
             <param externsync="true"><type>VkCommandBuffer</type> <name>commandBuffer</name></param>
             <param><type>uint32_t</type> <name>commandBufferCount</name></param>
             <param len="commandBufferCount">const <type>VkCommandBuffer</type>* <name>pCommandBuffers</name></param>
+        </command>
+        <command successcodes="VK_SUCCESS" errorcodes="VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY,VK_ERROR_NATIVE_WINDOW_IN_USE_KHR">
+            <proto><type>VkResult</type> <name>vkCreateSurfaceOHOS</name></proto>
+            <param><type>VkInstance</type> <name>instance</name></param>
+            <param>const <type>VkSurfaceCreateInfoOHOS</type>* <name>pCreateInfo</name></param>
+            <param optional="true">const <type>VkAllocationCallbacks</type>* <name>pAllocator</name></param>
+            <param><type>VkSurfaceKHR</type>* <name>pSurface</name></param>
         </command>
         <command successcodes="VK_SUCCESS" errorcodes="VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY,VK_ERROR_NATIVE_WINDOW_IN_USE_KHR">
             <proto><type>VkResult</type> <name>vkCreateAndroidSurfaceKHR</name></proto>
@@ -24355,6 +24371,17 @@ typedef void* <name>MTLSharedEvent_id</name>;
             <require>
                 <enum value="0"                                             name="VK_KHR_EXTENSION_575_SPEC_VERSION"/>
                 <enum value="&quot;VK_KHR_extension_575&quot;"              name="VK_KHR_EXTENSION_575_EXTENSION_NAME"/>
+            </require>
+        </extension>
+        <extension name="VK_OHOS_surface" number="576" type="instance" depends="VK_KHR_surface" platform="ohos" author="OHOS" contact="John Doe @jdoe" supported="vulkan" ratified="vulkan">
+            <require>
+                <enum value="1"                                                 name="VK_OHOS_SURFACE_SPEC_VERSION"/>
+                <enum value="&quot;VK_OHOS_surface&quot;"                       name="VK_OHOS_SURFACE_EXTENSION_NAME"/>
+                <type name="OHNativeWindow"/>
+                <enum offset="0" extends="VkStructureType"                      name="VK_STRUCTURE_TYPE_SURFACE_CREATE_INFO_OHOS"/>
+                <type name="VkSurfaceCreateFlagsOHOS"/>
+                <type name="VkSurfaceCreateInfoOHOS"/>
+                <command name="vkCreateSurfaceOHOS"/>
             </require>
         </extension>
     </extensions>
