@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export OHOS_SDK="/c/Users/a00914048/AppData/Local/OpenHarmony/Sdk/12/native"
-export VVL_DIR="/d/repos/test/third_party_vulkan-validationlayers"
+export OHOS_SDK="path/to/Sdk/native"
+export VVL_DIR="path/to/third_party_vulkan-validationlayers"
 export BUILD_THREADS=8
 export buildDir="${VVL_DIR}/build-ohos/intermediate"
 export libDir="{$VVL_DIR}/build-ohos/libs"
@@ -29,9 +29,7 @@ cmake \
     -D CMAKE_BUILD_TYPE=Release \
     -D VVL_CODEGEN=OFF \
     -D UPDATE_DEPS=ON \
-    -D UPDATE_DEPS_DIR=${buildDir} \
-    -D Python3_EXECUTABLE=/c/Users/a00914048/AppData/Local/Programs/Python/Python313/python3.exe
-
+    -D UPDATE_DEPS_DIR=${buildDir}
 cmake \
     --build ${buildDir} \
     --parallel ${BUILD_THREADS}
